@@ -1,5 +1,6 @@
 An implementation of the multipole direction decomposition as outlined in
-C.J. Copi, D. Huterer, and G.D. Starkman, astro-ph/03....
+C.J. Copi, D. Huterer, and G.D. Starkman, Phys. Rev. D, submitted
+  (astro-ph/03....)
 This solves the coupled set of quadratic equations in equation (A3) from
 Appendix A of that paper.  The equations are solved using routines from the
 gsl library.  It is known to work with gsl version 1.3 (though should work
@@ -43,17 +44,19 @@ decomposition.
 
 The latest version and other information on this implementation can always
 be found at
-http://www.phys.cwru.edu/[FILL IN]
+http://www.phys.cwru.edu/projects/mpvectors/
 
-Questions, bug reports, etc can be sent to XXX@???????.  Please make sure
-you are using the latest version.  Please include the version of the code
-your are using.  The version can be found in the rcsid string in
-mpd_decomp.c.  This can be pulled from source code.  Alternatively, if you
-have the rcs utility called "ident" available, and your compiler/linker
-doesn't strip the information (gcc/gnu ld does NOT strip this info) you can
-run ident on the binary to find which version was compiled into your program.
+Questions, bug reports, etc can be sent to
+mpvectors@theory1.phys.cwru.edu
+Please make sure you are using the latest version.  Please include the
+version of the code your are using.  The version can be found in the rcsid
+string in mpd_decomp.c.  This can be pulled from source code.
+Alternatively, if you have the rcs utility called "ident" available, and
+your compiler/linker doesn't strip the information (gcc/gnu ld does NOT
+strip this info) you can run ident on the binary to find which version was
+compiled into your program.
 
 The overall normalization (A^l) has not been well tested and may be
 calculated incorrectly.  You have been warned.
 
-$Id: README.mpd_decomp,v 1.1 2003/10/02 18:57:10 copi Exp $
+$Id: README.mpd_decomp,v 1.2 2003/10/13 21:22:13 copi Exp $

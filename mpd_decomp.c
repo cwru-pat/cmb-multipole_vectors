@@ -7,7 +7,7 @@
 
 
 static char const rcsid []
-  = "$Id$";
+  = "$Id: mpd_decomp.c,v 1.1.1.1 2003/03/14 23:58:47 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -437,7 +437,7 @@ double internal_Dm1 (int L, int M)
   return internal_Dp1 (L, -M);
 }
 
-ifdef MPD_DEBUG
+#ifdef MPD_DEBUG
 void internal_print_state (size_t iter, mpd_decomp_t *mpd,
 			   gsl_multiroot_fsolver *s)
 {

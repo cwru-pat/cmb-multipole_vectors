@@ -5,7 +5,7 @@
 
 
 static char const rcsid[]
-  = "$Id$";
+  = "$Id: mpd_driver.c,v 1.1.1.1 2003/03/14 23:58:47 copi Exp $";
 
 
 /*
@@ -53,7 +53,6 @@ int main (int argc, char *argv[])
 
   /* Clean up memory */
   mpd_decomp_vector_destroy (v);
-  mpd_decomp_destroy (mpd);
 
   exit (EXIT_SUCCESS);
 }

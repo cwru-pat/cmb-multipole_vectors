@@ -1,11 +1,13 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id$ */
+/* $Id: mpd_decomp.h,v 1.1.1.1 2003/03/14 23:58:47 copi Exp $ */
+
+#include <stdlib.h>
 
 
 typedef struct {
-  int L; /* L for *alm */
+  size_t L; /* L for *alm */
   double *alm; /* Size: 2L+1 */
   double *alminus1re, *alminus1im; /* Size: L+2 each.  The extra makes the
 				      algorithm easier. */
@@ -14,7 +16,7 @@ typedef struct {
 } mpd_decomp_t;
 
 typedef struct {
-  int L;
+  size_t L;
   double **vector;
 } mpd_decomp_vector_t;
 
@@ -22,7 +24,7 @@ typedef struct {
  * alm should be of size 2L+1.  alm[0]=al0, alm[1]=Re(al1), alm[2]=Im(al1), etc.
  * Returns NULL on failure.
  */
-mpd_decomp_t *mpd_decomp_create (int L, double *alm);
+mpd_decomp_t *mpd_decomp_create (size_t L, double *alm);
 
 /* Frees memory */
 void mpd_decomp_destroy (mpd_decomp_t *mpd);
@@ -38,9 +40,9 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v);
 /*
  * Do the full decomposition. Status returned as in mpd_decomp_fit.
  */
-int mpd_decomp_full_fit (int L, double *alm, mpd_decomp_vector_t *v);
+int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
 
-mpd_decomp_vector_t *mpd_decomp_vector_create (int L);
+mpd_decomp_vector_t *mpd_decomp_vector_create (size_t L);
 void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v);
 
 #endif

@@ -5,7 +5,7 @@
 
 
 static char const rcsid[]
-  = "$Id: mpd_driver.c,v 1.2 2003/03/15 00:01:35 copi Exp $";
+  = "$Id: mpd_driver.c,v 1.3 2003/03/19 20:59:05 copi Exp $";
 
 
 /*
@@ -21,11 +21,12 @@ int main (int argc, char *argv[])
 {
   mpd_decomp_vector_t *v;
   double *alm, tmp;
-  int status, m, l, L;
+  size_t m, l, L;
+  int status;
 
   tmp = 0.5*argc-1;
-  L = (int)tmp;
-  if (((int)(tmp+0.6) != L) || (L < 2)) {
+  L = (size_t)tmp;
+  if (((size_t)(tmp+0.6) != L) || (L < 2)) {
     usage (argv[0]);
     exit (EXIT_FAILURE);
   }

@@ -7,7 +7,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.3 2003/03/15 00:05:20 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.4 2003/03/19 21:40:09 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -216,6 +216,14 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
   (void) memcpy (a1m, alm, (2*L+1)*sizeof (alm[0]));
 
   for (l=L; l >= 2; --l) {
+    double a1mmax = -1;
+
+    for (m=0; m < 2*l+1; ++m) {
+      if (fabs (a1m[m]) > a1mmax) a1mmax = fabs (a1m[m]);
+    }
+    a1mmax = 1.0 / a1mmax;
+    for (m=0; m < 2*l+1; ++m) a1m[m] *= a1mmax;
+
     mpd = mpd_decomp_create (l, a1m);
     if (mpd == NULL) {
       status = GSL_ENOMEM;

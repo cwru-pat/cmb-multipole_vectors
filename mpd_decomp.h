@@ -1,7 +1,7 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.4 2003/09/12 19:43:11 copi Exp $ */
+/* $Id: mpd_decomp.h,v 1.5 2003/09/12 20:00:56 copi Exp $ */
 
 #include <stdlib.h>
 
@@ -9,6 +9,10 @@
 extern "C" {
 #endif
 
+/* Information used internally by mpd_decomp_fit to do the decomposition.
+ * Use mpd_decomp_create to initially allocate and build it from a list of
+ * alm.
+ */
 typedef struct {
   size_t L; /* L for *alm */
   double *alm; /* Size: 2L+1 */
@@ -18,19 +22,15 @@ typedef struct {
   double v[3]; /* Vector we construct */
 } mpd_decomp_t;
 
+/* Structure for returning the full decomposition of a rank L symmetric,
+ * traceless tensor.  The unit vectors are returned in vector and the
+ * overall normalization in norm.
+ */
 typedef struct {
   size_t L;
-  double **vector;
+  double **vector; /* Size [L][3] */
+  double norm;
 } mpd_decomp_vector_t;
-
-/* 
- * alm should be of size 2L+1.  alm[0]=al0, alm[1]=Re(al1), alm[2]=Im(al1), etc.
- * Returns NULL on failure.
- */
-mpd_decomp_t *mpd_decomp_create (size_t L, double *alm);
-
-/* Frees memory */
-void mpd_decomp_destroy (mpd_decomp_t *mpd);
 
 /*
  * Do the actual decomposition.  One vector and a rank l-1 tensor are 
@@ -49,6 +49,16 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v);
  * decomposition.
  */
 int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
+
+
+/* Routines to properly create and destroy the above structures. */
+
+/* 
+ * alm should be of size 2L+1.  alm[0]=al0, alm[1]=Re(al1), alm[2]=Im(al1), etc.
+ * Returns NULL on failure.
+ */
+mpd_decomp_t *mpd_decomp_create (size_t L, double *alm);
+void mpd_decomp_destroy (mpd_decomp_t *mpd);
 
 mpd_decomp_vector_t *mpd_decomp_vector_create (size_t L);
 void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v);

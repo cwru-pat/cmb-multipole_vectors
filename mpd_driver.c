@@ -5,12 +5,16 @@
 
 
 static char const rcsid[]
-  = "$Id: mpd_driver.c,v 1.3 2003/03/19 20:59:05 copi Exp $";
+  = "$Id: mpd_driver.c,v 1.4 2003/03/19 21:41:37 copi Exp $";
 
 
 /*
- * Read in 2L+1 coefficients from the command line.  Returns a vector and
- * the remaining 2L-1 coefficients.
+ * A simple driver routine for mpd_decomp_full_fit.  This program reads in
+ * 2L+1 coefficients from the command line, decomposes them into L vectors
+ * and a normalization, and prints the result to stdout.  This serves as
+ * an example of using mpd_decomp_full_fit.  The source code for that
+ * routine is also valuable if you want to write your own routine from the
+ * ground up.
  */
 
 
@@ -47,6 +51,7 @@ int main (int argc, char *argv[])
     exit (EXIT_FAILURE);
   }
 
+  printf ("Normalization %g\n", v->norm);
   for (l=0; l < L; ++l) {
     for (m=0; m < 3; ++m) printf ("%g ", v->vector[l][m]);
     printf ("\n");

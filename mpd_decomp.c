@@ -7,13 +7,15 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.4 2003/03/19 21:40:09 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.5 2003/04/21 23:02:39 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
 static int internal_mpd_decomp_f (const gsl_vector *x, void *params,
 				  gsl_vector *f);
 #if 0
+/* These do not appear to be necessary.  We are "only" solving quadratic
+ * equations and routines without derivative information seem sufficient. */
 static int internal_mpd_decomp_df (const gsl_vector *x, void *params,
 				   gsl_matrix *J);
 static int internal_mpd_decomp_fdf (const gsl_vector *x, void *params,
@@ -191,6 +193,7 @@ void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v)
  * Note that we have hard coded a number of things in like randomly picking
  * the starting values between [-1,1] and doing this 3 times at each level
  * before giving up.  If you don't like this, write your own driver!
+ * This routine serves as a fine example for writing your own.
  */
 int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
 {
@@ -260,6 +263,7 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
     for (m=0; m < 3; ++m) norm += v[m]*v[m];
     norm = sqrt (norm);
     for (m=0; m < 3; ++m) mpd_v->vector[L-1][m] = v[m] / norm;
+    mpd_v->norm = norm;
   }
 
  DONE:
@@ -297,7 +301,7 @@ static void internal_set_mpd_params (mpd_decomp_t *mpd, const gsl_vector *x)
   for (m=0; m < 3; ++m) mpd->v[m] = gsl_vector_get (x, m+offset);
 }
 
-#if 0 /* Not used!! */
+#if 0 /* Not needed!! */
 static int internal_mpd_decomp_fdf (const gsl_vector *x, void *params, 
 			     gsl_vector *f, gsl_matrix *J)
 {
@@ -377,25 +381,20 @@ static int internal_mpd_decomp_f (const gsl_vector *x, void *params, gsl_vector 
   return GSL_SUCCESS;
 }
 
-#if 0
+#if 0 /* Not needed */
 static int internal_mpd_decomp_df (const gsl_vector *x, void *params, gsl_matrix *J)
 {
-
-  /* NOT CODED YET, MIGHT NOT NEED!! */
   return GSL_FAILURE;
 }
 #endif
 
 
 /*
- * Coefficients from the YLM = Y1a Y(L-1)m decomposition.  Note, these are
- * really sqrt (4*M_PI/3) times the coefficients.  This factor comes from
- * the normalization of the vectors we are fitting.  It doesn't matter in
- * the end ....
+ * Coefficients from the YLM = Y1a Y(L-1)m decomposition.
  */
 static double internal_C0 (size_t L, int M)
 {
-  const double norm = 1.0;
+  const double norm = sqrt (3.0/(4.0*M_PI));
   double val;
 
   if (abs (M) >= L) return 0;
@@ -406,7 +405,7 @@ static double internal_C0 (size_t L, int M)
 
 static double internal_Cp1 (size_t L, int M)
 {
-  const double norm = sqrt (1.0 / 2.0);
+  const double norm = sqrt (3.0/(8.0*M_PI));
   double val;
 
   if (abs (M) > L) return 0;
@@ -425,7 +424,7 @@ static double internal_Cm1 (size_t L, int M)
  */
 static double internal_D0 (size_t L, int M)
 {
-  const double norm = 1;
+  const double norm = sqrt (3.0/(4.0*M_PI));
   double val;
 
   if (abs (M) > L-2) return 0;
@@ -436,7 +435,7 @@ static double internal_D0 (size_t L, int M)
 
 static double internal_Dp1 (size_t L, int M)
 {
-  const double norm = -sqrt (1.0 / 2.0);
+  const double norm = -sqrt (3.0/(8.0*M_PI));
   double val;
 
   if (abs (M) > L-2) return 0;

@@ -7,7 +7,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.1.1.1 2003/03/14 23:58:47 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.2 2003/03/15 00:00:02 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -197,7 +197,7 @@ int mpd_decomp_full_fit (int L, double *alm, mpd_decomp_vector_t *mpd_v)
   double *a1m, v[3];
   int m, l, try, status=0;
 
-  if (mpd_v->L != L) return -1;
+  if (mpd_v->L < L) return GSL_EINVAL;
 
   mpd = NULL;
   a1m = NULL;

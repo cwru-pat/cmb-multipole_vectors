@@ -34,7 +34,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.6 2003/10/02 17:52:34 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.7 2003/10/02 19:06:19 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -241,6 +241,7 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
   }
 
   srand ((unsigned int)time(NULL));
+  mpd_v->norm = 1.0;
 
   /* Get things started by copying alm into a1m (hence the size for a1m) */
   (void) memcpy (a1m, alm, (2*L+1)*sizeof (alm[0]));
@@ -248,9 +249,14 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
   for (l=L; l >= 2; --l) {
     double a1mmax = -1;
 
+    /* Renormalize the alm so they fall in the interval [-1,1].  This
+     * allows us to pick random values from this interval as our initial
+     * guess.  We include this factor in the normalization.
+     */
     for (m=0; m < 2*l+1; ++m) {
       if (fabs (a1m[m]) > a1mmax) a1mmax = fabs (a1m[m]);
     }
+    mpd_v->norm *= a1mmax;
     a1mmax = 1.0 / a1mmax;
     for (m=0; m < 2*l+1; ++m) a1m[m] *= a1mmax;
 
@@ -290,7 +296,7 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *mpd_v)
     for (m=0; m < 3; ++m) norm += v[m]*v[m];
     norm = sqrt (norm);
     for (m=0; m < 3; ++m) mpd_v->vector[L-1][m] = v[m] / norm;
-    mpd_v->norm = norm;
+    mpd_v->norm *= norm;
   }
 
  DONE:

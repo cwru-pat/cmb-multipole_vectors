@@ -1,7 +1,7 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.3 2003/05/09 03:45:36 copi Exp $ */
+/* $Id: mpd_decomp.h,v 1.4 2003/09/12 19:43:11 copi Exp $ */
 
 #include <stdlib.h>
 
@@ -42,7 +42,11 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v);
 
 /*
  * Do the full decomposition returning all the vectors. Status returned as
- * in mpd_decomp_fit.
+ * in mpd_decomp_fit.  Note that this makes a number of assumptions to get
+ * things working, such as randomly picking starting values.  These can
+ * easily fail.  The code for this routine can be used as a starting point
+ * for building your own decomposition loop using mpd_decomp_fit for each
+ * decomposition.
  */
 int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
 

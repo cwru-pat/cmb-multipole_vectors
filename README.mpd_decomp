@@ -1,17 +1,18 @@
 An implementation of the multipole direction decomposition as outlined in
-Copi, Huterer, and Starkman [FULL REF].  This solves the coupled set of
-quadratic equations in equation (XXXX) of that paper.  The equations are
-solved using routines from the gsl library.  It is known to work with gsl
-version 1.3 (though should work with others).  See
-http://sources.redhat.com/gsl/ for more information.  You must have this
-library installed to use the implementation provided here.
+C.J. Copi, D. Huterer, and G.D. Starkman, astro-ph/03....
+This solves the coupled set of quadratic equations in equation (A3) from
+Appendix A of that paper.  The equations are solved using routines from the
+gsl library.  It is known to work with gsl version 1.3 (though should work
+with others).  See http://sources.redhat.com/gsl/ for more information.
+You must have this library installed to use the implementation provided
+here.
 
 The code is released under a BSD license (see source files for exact
 terms).  Note that it relies upon gsl which is released under the GNU
 General Public License which may place other restrictions on your usage.
 This implementation is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 The two main files are
@@ -52,4 +53,7 @@ have the rcs utility called "ident" available, and your compiler/linker
 doesn't strip the information (gcc/gnu ld does NOT strip this info) you can
 run ident on the binary to find which version was compiled into your program.
 
-$Id$
+The overall normalization (A^l) has not been well tested and may be
+calculated incorrectly.  You have been warned.
+
+$Id: README.mpd_decomp,v 1.1 2003/10/02 18:57:10 copi Exp $

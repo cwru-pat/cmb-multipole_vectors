@@ -1,11 +1,14 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.1.1.1 2003/03/14 23:58:47 copi Exp $ */
+/* $Id: mpd_decomp.h,v 1.2 2003/03/19 21:39:31 copi Exp $ */
 
 #include <stdlib.h>
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
+ 
 typedef struct {
   size_t L; /* L for *alm */
   double *alm; /* Size: 2L+1 */
@@ -44,5 +47,9 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
 
 mpd_decomp_vector_t *mpd_decomp_vector_create (size_t L);
 void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v);
+
+#ifdef __cplusplus
+           }
+#endif
 
 #endif

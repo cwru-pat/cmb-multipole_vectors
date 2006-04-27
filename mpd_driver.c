@@ -32,7 +32,7 @@
 
 
 static char const rcsid[]
-  = "$Id: mpd_driver.c,v 1.5 2003/10/02 17:52:34 copi Exp $";
+  = "$Id: mpd_driver.c,v 1.6 2003/10/02 19:06:19 copi Exp $";
 
 
 /*
@@ -93,6 +93,6 @@ int main (int argc, char *argv[])
 
 static void usage (const char *progname)
 {
-  fprintf (stderr, "Usage: %s al0 a1mre a1mim a2mre a2mim a3mre a3mim [...]\n",
+  fprintf (stderr, "Usage: %s al0 al1re al1im al2re al2im al3re al3im [...]\n",
 	   progname);
 }

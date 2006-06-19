@@ -59,4 +59,8 @@ compiled into your program.
 The overall normalization (A^l) has not been well tested and may be
 calculated incorrectly.  You have been warned.
 
-$Id: README.mpd_decomp,v 1.3 2003/10/17 19:06:33 copi Exp $
+Changes:
+  19 Jun 2006 : Fixed a memory leak in mpd_decomp_vector_create.
+                (Found by Bjarne Thomsen)
+
+$Id: README.mpd_decomp,v 1.4 2003/10/17 20:16:26 copi Exp $

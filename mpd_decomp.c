@@ -34,7 +34,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.7 2003/10/02 19:06:19 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.8 2003/10/02 21:26:52 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -182,7 +182,7 @@ mpd_decomp_vector_t *mpd_decomp_vector_create (size_t L)
   mpd_decomp_vector_t *v;
   size_t l;
 
-  v = (mpd_decomp_vector_t *) malloc (L*sizeof (mpd_decomp_vector_t));
+  v = (mpd_decomp_vector_t *) malloc (sizeof (mpd_decomp_vector_t));
   if (v == NULL) return NULL;
 
   v->L = L;

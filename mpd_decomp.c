@@ -34,7 +34,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.10 2006/06/27 17:25:59 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.11 2006/06/27 17:34:04 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -285,7 +285,7 @@ int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *mpd_v
 
   /*
    * For the quadrupole, a1m is the other vector, in some funny form.  So
-   * pull this apart, normalize it, and store it.  Not the extra factor of
+   * pull this apart, normalize it, and store it.  Note the extra factor of
    * 3/4Pi that comes from Y1m.
    */
   {

@@ -1,7 +1,7 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.5 2003/09/12 20:00:56 copi Exp $ */
+/* $Id: mpd_decomp.h,v 1.6 2003/10/02 17:52:34 copi Exp $ */
 
 #include <stdlib.h>
 
@@ -9,12 +9,14 @@
 extern "C" {
 #endif
 
+#define MPD_VERSION "1.10"
+
 /* Information used internally by mpd_decomp_fit to do the decomposition.
  * Use mpd_decomp_create to initially allocate and build it from a list of
  * alm.
  */
 typedef struct {
-  size_t L; /* L for *alm */
+  unsigned int L; /* L for *alm */
   double *alm; /* Size: 2L+1 */
   double *alminus1re, *alminus1im; /* Size: L+2 each.  The extra entry
 				      makes the algorithm easier. */
@@ -27,7 +29,7 @@ typedef struct {
  * overall normalization in norm.
  */
 typedef struct {
-  size_t L;
+  unsigned int L;
   double **vector; /* Size [L][3] */
   double norm;
 } mpd_decomp_vector_t;
@@ -48,7 +50,7 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v);
  * for building your own decomposition loop using mpd_decomp_fit for each
  * decomposition.
  */
-int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
+int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *v);
 
 
 /* Routines to properly create and destroy the above structures. */
@@ -57,10 +59,10 @@ int mpd_decomp_full_fit (size_t L, double *alm, mpd_decomp_vector_t *v);
  * alm should be of size 2L+1.  alm[0]=al0, alm[1]=Re(al1), alm[2]=Im(al1), etc.
  * Returns NULL on failure.
  */
-mpd_decomp_t *mpd_decomp_create (size_t L, double *alm);
+mpd_decomp_t *mpd_decomp_create (unsigned int L, double *alm);
 void mpd_decomp_destroy (mpd_decomp_t *mpd);
 
-mpd_decomp_vector_t *mpd_decomp_vector_create (size_t L);
+mpd_decomp_vector_t *mpd_decomp_vector_create (unsigned int L);
 void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v);
 
 #ifdef __cplusplus

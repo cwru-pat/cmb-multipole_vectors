@@ -64,6 +64,7 @@ Changes:
   19 Jun 2006 : (v1.9) Fixed a memory leak in mpd_decomp_vector_create.
                 (Found by Bjarne Thomsen)
   27 Jun 2006 : (v1.10) Changed the normalization.  A^l may be correct
-                now.  It seems to be correct for quadrupoles.
+                now.  It seems to be correct for quadrupoles.  Also changed
+		all size_t to unsigned int.
 
-$Id: README.mpd_decomp,v 1.5 2006/06/19 15:19:24 copi Exp $
+$Id: README.mpd_decomp,v 1.6 2006/06/27 17:28:01 copi Exp $

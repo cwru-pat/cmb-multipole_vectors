@@ -1,4 +1,4 @@
-VERSION 1.10
+VERSION 1.11
 
 An implementation of the multipole direction decomposition as outlined in
 C.J. Copi, D. Huterer, and G.D. Starkman, Phys. Rev. D, 70, 043515 (2004).
@@ -66,5 +66,7 @@ Changes:
   27 Jun 2006 : (v1.10) Changed the normalization.  A^l may be correct
                 now.  It seems to be correct for quadrupoles.  Also changed
 		all size_t to unsigned int.
+  27 Jun 2006 : (v1.11) Changed the normalization again.  Now A^l is
+                correct for alm = delta_{m,0}.
 
-$Id: README.mpd_decomp,v 1.6 2006/06/27 17:28:01 copi Exp $
+$Id: README.mpd_decomp,v 1.7 2006/06/27 17:34:43 copi Exp $

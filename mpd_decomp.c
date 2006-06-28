@@ -34,7 +34,7 @@
 
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.11 2006/06/27 17:34:04 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.12 2006/06/27 18:28:13 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -285,8 +285,8 @@ int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *mpd_v
 
   /*
    * For the quadrupole, a1m is the other vector, in some funny form.  So
-   * pull this apart, normalize it, and store it.  Note the extra factor of
-   * 3/4Pi that comes from Y1m.
+   * pull this apart, normalize it, and store it.  Note the factor
+   * (3/4Pi)^(L/2) comes from Y1m factors peeled off in the decomposition.
    */
   {
     double norm = 0;
@@ -297,7 +297,8 @@ int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *mpd_v
     for (m=0; m < 3; ++m) norm += v[m]*v[m];
     norm = sqrt (norm);
     for (m=0; m < 3; ++m) mpd_v->vector[L-1][m] = v[m] / norm;
-    mpd_v->norm *= norm * (0.25*3.0/M_PI);
+    norm *= pow (0.25*3.0/M_PI, 0.5*L);
+    mpd_v->norm *= norm;
   }
 
  DONE:

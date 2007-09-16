@@ -31,10 +31,10 @@
 #include <time.h>
 #include <gsl/gsl_multiroots.h>
 #include "mpd_decomp.h"
-#include <dmalloc.h>
+
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.13 2006/06/28 02:17:40 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.14 2007-09-16 19:22:06 copi Exp $";
 
 
 /* Internal functions needed for the fitting */

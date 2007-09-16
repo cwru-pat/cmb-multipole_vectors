@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 Craig J Copi
+ * Copyright (c) 2003-2007 Craig J Copi
  * All rights reserved.
   
  * Redistribution and use in source and binary forms, with or without
@@ -32,7 +32,7 @@
 
 
 static char const rcsid[]
-  = "$Id: mpd_driver.c,v 1.7 2006/04/27 19:59:46 copi Exp $";
+  = "$Id: mpd_driver.c,v 1.8 2006/06/27 17:34:04 copi Exp $";
 
 
 /*
@@ -86,6 +86,7 @@ int main (int argc, char *argv[])
 
   /* Clean up memory */
   mpd_decomp_vector_destroy (v);
+  free (alm);
 
   exit (EXIT_SUCCESS);
 }

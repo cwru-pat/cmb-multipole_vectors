@@ -1,7 +1,7 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.7 2006/06/27 17:34:04 copi Exp $ */
+/* $Id: mpd_decomp.h,v 1.8 2006/06/28 02:17:40 copi Exp $ */
 
 #include <stdlib.h>
 
@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-#define MPD_VERSION "1.11"
+#define MPD_VERSION "1.12"
 
 /* Information used internally by mpd_decomp_fit to do the decomposition.
  * Use mpd_decomp_create to initially allocate and build it from a list of

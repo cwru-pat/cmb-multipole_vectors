@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003 Craig J Copi
+ * Copyright (c) 2003-2007 Craig J Copi
  * All rights reserved.
   
  * Redistribution and use in source and binary forms, with or without
@@ -31,10 +31,10 @@
 #include <time.h>
 #include <gsl/gsl_multiroots.h>
 #include "mpd_decomp.h"
-
+#include <dmalloc.h>
 
 static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.12 2006/06/27 18:28:13 copi Exp $";
+  = "$Id: mpd_decomp.c,v 1.13 2006/06/28 02:17:40 copi Exp $";
 
 
 /* Internal functions needed for the fitting */
@@ -259,6 +259,9 @@ int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *mpd_v
     mpd_v->norm *= a1mmax;
     a1mmax = 1.0 / a1mmax;
     for (m=0; m < 2*l+1; ++m) a1m[m] *= a1mmax;
+
+    /* Clean up the previous loop. */
+    if (mpd != NULL) mpd_decomp_destroy (mpd);
 
     mpd = mpd_decomp_create (l, a1m);
     if (mpd == NULL) {

@@ -1,4 +1,4 @@
-VERSION 1.11
+VERSION 1.12
 
 An implementation of the multipole direction decomposition as outlined in
 C.J. Copi, D. Huterer, and G.D. Starkman, Phys. Rev. D, 70, 043515 (2004).
@@ -48,7 +48,7 @@ be found at
 http://www.phys.cwru.edu/projects/mpvectors/
 
 Questions, bug reports, etc can be sent to
-mpvectors@theory1.phys.cwru.edu
+mpvectors@phys.cwru.edu
 Please make sure you are using the latest version.  Please include the
 version of the code your are using.  The version can be found in the rcsid
 string in mpd_decomp.c.  This can be pulled from source code.
@@ -56,9 +56,6 @@ Alternatively, if you have the rcs utility called "ident" available, and
 your compiler/linker doesn't strip the information (gcc/gnu ld does NOT
 strip this info) you can run ident on the binary to find which version was
 compiled into your program.
-
-The overall normalization (A^l) has not been well tested and may be
-calculated incorrectly.  You have been warned.
 
 Changes:
   19 Jun 2006 : (v1.9) Fixed a memory leak in mpd_decomp_vector_create.
@@ -68,5 +65,7 @@ Changes:
 		all size_t to unsigned int.
   27 Jun 2006 : (v1.11) Changed the normalization again.  Now A^l is
                 correct for alm = delta_{m,0}.
+  16 Sep 2007 : (v1.12) Fixed memory leak in mpd_decomp_full_fit.
+                (Found by Cristian Armendariz-Picon)
 
-$Id: README.mpd_decomp,v 1.7 2006/06/27 17:34:43 copi Exp $
+$Id: README.mpd_decomp,v 1.8 2006/06/28 02:17:40 copi Exp $

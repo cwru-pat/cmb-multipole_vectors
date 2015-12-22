@@ -33,10 +33,6 @@
 #include "mpd_decomp.h"
 
 
-static char const rcsid []
-  = "$Id: mpd_decomp.c,v 1.14 2007-09-16 19:22:06 copi Exp $";
-
-
 /* Internal functions needed for the fitting */
 static int internal_mpd_decomp_f (const gsl_vector *x, void *params,
 				  gsl_vector *f);

@@ -1,8 +1,6 @@
 #ifndef MPD_DECOMP_H_
 #define MPD_DECOMP_H_
 
-/* $Id: mpd_decomp.h,v 1.8 2006/06/28 02:17:40 copi Exp $ */
-
 #include <stdlib.h>
 
 #ifdef __cplusplus

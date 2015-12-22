@@ -67,5 +67,3 @@ Changes:
                 correct for alm = delta_{m,0}.
   16 Sep 2007 : (v1.12) Fixed memory leak in mpd_decomp_full_fit.
                 (Found by Cristian Armendariz-Picon)
-
-$Id: README.mpd_decomp,v 1.8 2006/06/28 02:17:40 copi Exp $

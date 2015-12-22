@@ -31,10 +31,6 @@
 #include "mpd_decomp.h"
 
 
-static char const rcsid[]
-  = "$Id: mpd_driver.c,v 1.8 2006/06/27 17:34:04 copi Exp $";
-
-
 /*
  * A simple driver routine for mpd_decomp_full_fit.  This program reads in
  * 2L+1 coefficients from the command line, decomposes them into L vectors

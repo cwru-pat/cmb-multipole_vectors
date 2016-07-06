@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-#define MPD_VERSION "1.12"
+#define MPD_VERSION "1.20"
 
 /* Information used internally by mpd_decomp_fit to do the decomposition.
  * Use mpd_decomp_create to initially allocate and build it from a list of
@@ -18,7 +18,6 @@ typedef struct {
   double *alm; /* Size: 2L+1 */
   double *alminus1re, *alminus1im; /* Size: L+2 each.  The extra entry
 				      makes the algorithm easier. */
-  double *bre, *bim; /* Size: L each.  The extra entry makes things easier. */
   double v[3]; /* Vector we construct */
 } mpd_decomp_t;
 

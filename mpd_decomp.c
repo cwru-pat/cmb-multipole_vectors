@@ -48,9 +48,6 @@ static void internal_set_mpd_params (mpd_decomp_t *mpd, const gsl_vector *x);
 static double internal_C0 (unsigned int L, int M);
 static double internal_Cp1 (unsigned int L, int M);
 static double internal_Cm1 (unsigned int L, int M);
-static double internal_D0 (unsigned int L, int M);
-static double internal_Dp1 (unsigned int L, int M);
-static double internal_Dm1 (unsigned int L, int M);
 #ifdef MPD_DEBUG
 static void internal_print_state (unsigned int iter, mpd_decomp_t *mpd,
 				  gsl_multiroot_fsolver *s);
@@ -69,7 +66,6 @@ mpd_decomp_t *mpd_decomp_create (unsigned int L, double *alm)
 
   mpd->L = L;
   mpd->alm = mpd->alminus1re = mpd->alminus1im = NULL;
-  mpd->bre = mpd->bim = NULL;
 
   mpd->alm = (double *) malloc ((2*L+1)*sizeof (double));
 
@@ -88,17 +84,6 @@ mpd_decomp_t *mpd_decomp_create (unsigned int L, double *alm)
     return NULL;
   }
 
-  /*
-   * Note: We make the sizes of these L-1 and are careful to ONLY access these!
-   */
-  mpd->bre = (double *) calloc (L-1, sizeof (double));
-  mpd->bim = (double *) calloc (L-1, sizeof (double));
-
-  if ((mpd->bre == NULL) || (mpd->bim == NULL)) {
-    mpd_decomp_destroy (mpd);
-    return NULL;
-  }
-
   (void)memcpy (mpd->alm, alm, (2*L+1)*sizeof (alm[0]));
 
   return mpd;
@@ -110,8 +95,6 @@ void mpd_decomp_destroy (mpd_decomp_t *mpd)
   if (mpd->alm != NULL) free (mpd->alm);
   if (mpd->alminus1re != NULL) free (mpd->alminus1re);
   if (mpd->alminus1im != NULL) free (mpd->alminus1im);
-  if (mpd->bre != NULL) free (mpd->bre);
-  if (mpd->bim != NULL) free (mpd->bim);
 
   free (mpd);
 }
@@ -126,8 +109,8 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v)
   const gsl_multiroot_fsolver_type *T = gsl_multiroot_fsolver_dnewton;
   gsl_multiroot_fsolver *s;
   int status;
-  unsigned int i, offset, iter=0;
-  unsigned int N = 4*mpd->L - 1; /* Number of parameters to fit */
+  unsigned int i, iter=0;
+  unsigned int N = 2*mpd->L + 2; /* Number of parameters to fit */
 
   gsl_multiroot_function f = { &internal_mpd_decomp_f, N, mpd };
   gsl_vector *x = gsl_vector_alloc (N);
@@ -135,8 +118,6 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v)
   /* Initialize */
   for (i=0; i < 2*mpd->L-1; ++i) gsl_vector_set (x, i, alm[i]);
   /* Totally arbitrarily set */
-  offset = 2*mpd->L-1;
-  for (i=0; i < 2*mpd->L-3; ++i) gsl_vector_set (x, i+offset, alm[offset-1-i]);
   for (i=0; i < 3; ++i) gsl_vector_set (x, N-3+i, v[i]);
 
   s = gsl_multiroot_fsolver_alloc (T, N);
@@ -163,7 +144,6 @@ int mpd_decomp_fit (mpd_decomp_t *mpd, double *alm, double *v)
 
   if (status == GSL_SUCCESS) { /* Over write input arrays */
     for (i=0; i < 2*mpd->L-1; ++i) alm[i] = gsl_vector_get (s->x, i);
-    /* Ignore bre, bim since we don't need them!! */
     for (i=0; i < 3; ++i) v[i] = gsl_vector_get (s->x, N-3+i);
   }
 
@@ -218,7 +198,8 @@ void mpd_decomp_vector_destroy (mpd_decomp_vector_t *v)
  * before giving up.  If you don't like this, write your own driver!
  * This routine serves as a fine example for writing your own.
  */
-int mpd_decomp_full_fit (unsigned int L, double *alm, mpd_decomp_vector_t *mpd_v)
+int mpd_decomp_full_fit (unsigned int L, double *alm,
+			 mpd_decomp_vector_t *mpd_v)
 {
   mpd_decomp_t *mpd;
   double *a1m, v[3];
@@ -325,13 +306,6 @@ static void internal_set_mpd_params (mpd_decomp_t *mpd, const gsl_vector *x)
   }
 
   offset = 2*mpd->L-1;
-  mpd->bre[0] = gsl_vector_get (x, 0+offset);
-  for (m=1; m <= mpd->L-2; ++m) {
-    mpd->bre[m] = gsl_vector_get (x, 2*m-1+offset);
-    mpd->bim[m] = gsl_vector_get (x, 2*m+offset);
-  }
-
-  offset += 2*mpd->L-3;
   for (m=0; m < 3; ++m) mpd->v[m] = gsl_vector_get (x, m+offset);
 }
 
@@ -349,19 +323,18 @@ static int internal_mpd_decomp_fdf (const gsl_vector *x, void *params,
 }
 #endif
 
-static int internal_mpd_decomp_f (const gsl_vector *x, void *params, gsl_vector *f)
+static int internal_mpd_decomp_f (const gsl_vector *x, void *params,
+				  gsl_vector *f)
 {
   mpd_decomp_t *mpd = (mpd_decomp_t *)params;
   double val; /* Used for computations. */
-  double *v, *am1re, *am1im, *bre, *bim; /* Shorthand to save some typing */
+  double *v, *am1re, *am1im; /* Shorthand to save some typing */
   unsigned int L, m, offset;
 
   internal_set_mpd_params (mpd, x);
   v = mpd->v;
   am1re = mpd->alminus1re;
   am1im = mpd->alminus1im;
-  bre = mpd->bre;
-  bim = mpd->bim;
   L = mpd->L;
   
   /* Treat m=0 separately.  Here we ONLY have an equation for the real part
@@ -384,39 +357,16 @@ static int internal_mpd_decomp_f (const gsl_vector *x, void *params, gsl_vector 
     gsl_vector_set (f, 2*m, val - mpd->alm[2*m]);
   }
 
-  /* Internal parameters */
-  offset = 2*L+1;
-
-  /* Treat m=0 separately.  Here we ONLY have an equation for the real part
-     (as b0 is purely real). */
-  val = internal_D0(L,0)*v[2]*am1re[0]
-    + sqrt(2.0)*internal_Dp1(L,0)*(am1re[1]*v[0] - am1im[1]*v[1]);
-  gsl_vector_set (f, 0+offset, val - bre[0]);
-  
-  /* The L-2 pieces. */
-  for (m=1; m <= L-2; ++m) {
-    /* Re(bm) */
-    val = internal_D0(L,m)*v[2]*am1re[m]
-      - internal_Dp1(L,m)/sqrt(2.0)*(v[0]*am1re[m-1] + v[1]*am1im[m-1])
-      + internal_Dm1(L,m)/sqrt(2.0)*(v[0]*am1re[m+1] - v[1]*am1im[m+1]);
-    gsl_vector_set (f, 2*m-1+offset, val - bre[m]);
-    /* Im(bm) */
-    val = internal_D0(L,m)*v[2]*am1im[m]
-      - internal_Dp1(L,m)/sqrt(2.0)*(v[0]*am1im[m-1] - v[1]*am1re[m-1])
-      + internal_Dm1(L,m)/sqrt(2.0)*(v[0]*am1im[m+1] + v[1]*am1re[m+1]);
-    gsl_vector_set (f, 2*m+offset, val - bim[m]);
-  }
-
-
   /* Normalization condition */
-  offset += 2*L-3;
+  offset = 2*L+1;
   gsl_vector_set (f, offset, v[0]*v[0]+v[1]*v[1]+v[2]*v[2] - 1);
 
   return GSL_SUCCESS;
 }
 
 #if 0 /* Not needed */
-static int internal_mpd_decomp_df (const gsl_vector *x, void *params, gsl_matrix *J)
+static int internal_mpd_decomp_df (const gsl_vector *x, void *params,
+				   gsl_matrix *J)
 {
   return GSL_FAILURE;
 }
@@ -453,42 +403,12 @@ static double internal_Cm1 (unsigned int L, int M)
   return internal_Cp1 (L, -M);
 }
 
-/*
- * Coefficients from the YL-2,M piece of decomposition.  Normalized as above.
- */
-static double internal_D0 (unsigned int L, int M)
-{
-  const double norm = sqrt (3.0/(4.0*M_PI));
-  double val;
-
-  if (abs (M) > L-2) return 0;
-
-  val = norm * sqrt ((L-M-1.0)*(L+M-1.0) / ((2*L-3.0)*(2*L-1.0)));
-  return val;
-}
-
-static double internal_Dp1 (unsigned int L, int M)
-{
-  const double norm = -sqrt (3.0/(8.0*M_PI));
-  double val;
-
-  if (abs (M) > L-2) return 0;
-
-  val = norm * sqrt ((L-M-1.0)*(L-M) / ((2*L-3.0)*(2*L-1.0)));
-  return val;
-}
-
-static double internal_Dm1 (unsigned int L, int M)
-{
-  return internal_Dp1 (L, -M);
-}
-
 #ifdef MPD_DEBUG
 static void internal_print_state (unsigned int iter, mpd_decomp_t *mpd,
 				  gsl_multiroot_fsolver *s)
 {
-  unsigned int m, offset;
-  unsigned int N = 4*mpd->L-1;
+  unsigned int m;
+  unsigned int N = 2*mpd->L+2;
 
   printf ("\nMPD_DECOMP version %s\n", MPD_VERSION);
   printf ("iter = %3u:\n", iter);
@@ -496,17 +416,11 @@ static void internal_print_state (unsigned int iter, mpd_decomp_t *mpd,
   for (m=1; m < mpd->L; ++m)
     printf ("\t%2d (%g, %g)\n", m, gsl_vector_get (s->x, 2*m-1),
 	    gsl_vector_get (s->x, 2*m));
-  printf ("\tbm\n");
-  offset = 2*mpd->L-1;
-  printf ("\t 0 (%g, 0)\n", gsl_vector_get (s->x, 0+offset));
-  for (m=1; m < mpd->L-1; ++m)
-    printf ("\t%2d (%g, %g)\n", m, gsl_vector_get (s->x, 2*m-1+offset),
-	    gsl_vector_get (s->x, 2*m+offset));
   printf ("\t v = (%g, %g, %g)\n",
 	  gsl_vector_get (s->x, N-3), gsl_vector_get (s->x, N-2),
 	  gsl_vector_get (s->x, N-1));
   printf ("\tf: ");
-  for (m=0; m < 4*mpd->L-1; ++m) printf (" %g", gsl_vector_get (s->f, m));
+  for (m=0; m < N; ++m) printf (" %g", gsl_vector_get (s->f, m));
   printf ("\n");
 }
 #endif

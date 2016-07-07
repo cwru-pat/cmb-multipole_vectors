@@ -12,7 +12,7 @@ Implementation of the multipole vector decomposition.
 Equations from (A3) in Copi, C.J, Huterer, D., and Starkman, G.D., PRD, 70,
 043515 (2004).
 
-The equations have been updated to NOT include the 2l-1 constraints that
+The equations have been updated to NOT include the 2l-3 constraints that
 define the `b` as these are not needed!
 """
 

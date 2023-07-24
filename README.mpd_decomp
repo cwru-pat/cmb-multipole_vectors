@@ -1,4 +1,4 @@
-VERSION 1.20
+VERSION 1.30
 
 C implementation:
 
@@ -76,7 +76,10 @@ Changes:
                 correct for alm = delta_{m,0}.
   16 Sep 2007 : (v1.12) Fixed memory leak in mpd_decomp_full_fit.
                 (Found by Cristian Armendariz-Picon)
-  06 Jul 2016 : (v1.20) Removed the equations for the 'b'.  These were
-     	        redundant and not used for anything.  They just wasted
-		memory and computational time!  Updated documentation,
-		including reference to the Python implementation.
+  06 Jul 2016 : (v1.20) Removed the equations for the 'b'. 
+                These were redundant and not used for anything.
+                They just wasted memory and computational time!
+                Updated documentation,including reference to the Python implementation.
+  24 Jul 2023 : (v1.30) Modernize the python implementation.
+                Use Python3, f-strings, and fix some spacing.
+                Add mpd_decomp_healpy_alm convenience function usable when healpy is installed.

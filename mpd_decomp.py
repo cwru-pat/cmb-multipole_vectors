@@ -42,8 +42,7 @@ def norm(v):
 
 
 def _extract_pieces(L, x):
-    # Extra space in alm set to zero to allow easier equations in
-    # mpd_equation_system
+    # Extra space in alm set to zero to allow easier equations in mpd_equation_system
     alm = np.zeros(L+2, dtype=complex)
     v = np.zeros(3)
     alm[0] = x[0]
@@ -61,7 +60,7 @@ def mpd_equation_system(x, L, alm):
     These are stored in x in the format:
       x[:2*L-1]: new alm as a_{l-1,0}, a_{l-1,1} real, a_{l-1,1} imag, ...
       x[2*L-1:2*L+2]: x,y,z components of vector, v.
-      Seed _extract_pieces for how these are pulled apart.
+      See _extract_pieces for how these are pulled apart.
     The input alm are provided in the same order as the new alm."""
 
     (afit, v) = _extract_pieces(L, x)

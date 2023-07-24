@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-#define MPD_VERSION "1.20"
+#define MPD_VERSION "1.30"
 
 /* Information used internally by mpd_decomp_fit to do the decomposition.
  * Use mpd_decomp_create to initially allocate and build it from a list of
